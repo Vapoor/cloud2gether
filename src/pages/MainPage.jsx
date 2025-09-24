@@ -4,8 +4,8 @@ const MainPage = () => {
   };
 
   const handleHowItWorks = () => {
-    alert("Expliquez ici comment fonctionne l'application !");
-    // Remplacez par un vrai modal ou une page plus tard
+    // Build this page later
+    alert("This feature is coming soon!");
   };
 
   return (
