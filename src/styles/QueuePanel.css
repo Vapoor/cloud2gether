@@ -1,0 +1,21 @@
+.queue-panel { width: 280px; padding: 24px 20px; border-right: 1px solid #24262b; background:#14161a; display:flex; flex-direction:column; gap:16px; }
+.panel-title { margin:0 0 4px; font-size:20px; font-weight:600; }
+.queue-container { flex:1; overflow-y:auto; padding-right:4px; }
+.queue-empty { font-size:14px; color:#7b818c; padding:12px 4px; }
+.queue-item { display:flex; align-items:center; gap:10px; padding:6px 4px; border-radius:6px; transition:background .15s; }
+.queue-item:hover { background:#1d2025; }
+.queue-artwork { width:42px; height:42px; object-fit:cover; border-radius:4px; background:#282c32; }
+.queue-meta { flex:1; overflow:hidden; }
+.queue-title { font-size:13px; font-weight:500; white-space:nowrap; overflow:hidden; text-overflow:ellipsis; }
+.queue-artist { font-size:11px; color:#8b929d; margin-top:2px; white-space:nowrap; overflow:hidden; text-overflow:ellipsis; }
+.remove-btn { background:none; border:none; color:#ff5f56; font-size:18px; line-height:1; cursor:pointer; padding:2px 6px; border-radius:4px; }
+.remove-btn:hover { background:rgba(255,95,86,0.15); }
+.skip-btn { background:#2563eb; border:none; color:#fff; padding:10px 14px; font-size:14px; border-radius:6px; cursor:pointer; font-weight:500; }
+.skip-btn:hover:not(:disabled){ background:#1d4ed8; }
+.skip-btn:disabled { background:#2d3542; color:#707883; cursor:not-allowed; }
+.queue-actions { display:flex; align-items:center; gap:8px; }
+.addedby-avatar { width:22px; height:22px; border-radius:50%; object-fit:cover; background:#282c32; }
+
+@media (max-width: 1000px){
+  .queue-panel { width:100%; flex-direction:row; flex-wrap:wrap; border-right:none; border-bottom:1px solid #24262b; }
+}

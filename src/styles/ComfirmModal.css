@@ -1,0 +1,13 @@
+
+.modal-backdrop { position:fixed; inset:0; background:rgba(0,0,0,0.6); display:flex; align-items:center; justify-content:center; z-index:1000; }
+.modal-card { width:90%; max-width:420px; background:#181b20; border:1px solid #2a2f36; border-radius:12px; padding:16px; }
+.modal-title { margin:0 0 8px; font-size:16px; font-weight:600; }
+.modal-msg { margin:0 0 14px; color:#a0a6af; font-size:14px; }
+.modal-actions { display:flex; justify-content:flex-end; gap:10px; }
+
+
+.btn { padding:8px 12px; border-radius:8px; border:none; cursor:pointer; font-weight:500; }
+.btn-muted { background:#2a2f36; color:#e5e7eb; }
+.btn-muted:hover { background:#333941; }
+.btn-danger { background:#ef4444; color:#fff; }
+.btn-danger:hover { background:#dc2626; }
