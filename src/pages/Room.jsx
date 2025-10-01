@@ -1,4 +1,4 @@
-import { useEffect, useRef, useState } from "react";
+import { useEffect, useMemo, useRef, useState } from "react";
 import { useParams } from "react-router-dom";
 import { io } from "socket.io-client";
 import "../styles/Room.css";
@@ -25,20 +25,22 @@ const Room = () => {
 
   // UI
   const [volume, setVolume] = useState(50);
-  const playerRef = useRef(null);
+
 
   const [user, setUser] = useState({ id: null, username: "", avatar_url: "" });
   const [members, setMembers] = useState([]);
   const [playlists, setPlaylists] = useState([]);
   const [confirm, setConfirm] = useState({ open: false, title: "", message: "", onConfirm: null, onCancel: null });
 
-  // sockets
+  // sockets + sync
   const socketRef = useRef(null);
-  const serverTimeOffsetRef = useRef(0);
+  const serverTimeOffsetRef = useRef(0); // clientNow - serverNow
+  const playerRef = useRef(null);
+  const loadedTrackRef = useRef(null);
 
   const currentTrack = queue[currentIndex];
 
-  // Load current user once
+  // connect socket and receive room state
   useEffect(() => {
     let cancelled = false;
     (async () => {
@@ -76,8 +78,8 @@ const Room = () => {
     });
 
     socket.on("room:state", ({ state, serverTimeMs }) => {
-      if (serverTimeMs) {
-        const rtt = Date.now() - (t0 || Date.now());
+      if (serverTimeMs && t0) {
+        const rtt = Date.now() - t0;
         serverTimeOffsetRef.current = Math.round((t0 + rtt / 2) - serverTimeMs);
         t0 = 0;
       }
@@ -95,12 +97,12 @@ const Room = () => {
     };
   }, [code, user]);
 
-  // compute target position from base + elapsed (server clock)
-  const targetPositionMs = (() => {
+  // compute target position on client clock
+  const targetPositionMs = useMemo(() => {
     const updatedAtOnClient = (updatedAtMs || 0) + serverTimeOffsetRef.current;
     const elapsed = Math.max(0, Date.now() - updatedAtOnClient);
     return isPlaying ? (basePositionMs || 0) + elapsed : (basePositionMs || 0);
-  })();
+  }, [isPlaying, basePositionMs, updatedAtMs]);
 
   // search
   const handleSearch = async () => {
@@ -131,14 +133,19 @@ const Room = () => {
     socketRef.current?.emit("room:skip", { code: String(code).toUpperCase() });
   };
 
-
-  const handleVolumeChange = (e) => {
-    const v = Number(e.target.value) || 0;
-    setVolume(v);
-    playerRef.current?.setVolume(v); // uses widget.setVolume(v)
-  };
-
-
+  // ONLY load track when it actually changes (not on every state update)
+  useEffect(() => {
+    if (!currentTrack?.id || !playerRef.current) return;
+    if (loadedTrackRef.current === currentTrack.id) return; // Already loaded
+    
+    loadedTrackRef.current = currentTrack.id;
+    
+    playerRef.current.loadTrackById(currentTrack.id, {
+      autoPlay: isPlaying,
+      startMs: targetPositionMs,
+      volume: 50,
+    });
+  }, [currentTrack?.id]); // ONLY depend on track ID
 
   return (
     <div className="room-container three-col">
@@ -184,26 +191,10 @@ const Room = () => {
 
         {/* Custom audio player (in sync) */}
         {currentTrack && (
-          <div className="widget-container">
-            <PlayerWidget
-              ref={playerRef}
-              trackId={currentTrack.id}
-              initialVolume={volume}
-              onEnded={requestSkip}
-            />
-            <div className="volume-control">
-              <span className="volume-icon">🔊</span>
-              <input
-                type="range"
-                min="0"
-                max="100"
-                value={volume}
-                onChange={handleVolumeChange}
-                className="volume-slider"
-              />
-              <span className="volume-value">{volume}%</span>
-            </div>
-          </div>
+          <PlayerWidget
+            ref={playerRef}
+            onEnded={requestSkip}
+          />
         )}
       </main>
 

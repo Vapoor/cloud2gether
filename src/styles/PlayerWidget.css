@@ -5,8 +5,9 @@
   margin-bottom: 50px;
   display: flex;
   flex-direction: column;
-  gap: 10px;
+  gap: 15px;
 }
+
 .widget-iframe {
   width: 100%;
   height: 166px;
@@ -14,22 +15,81 @@
   border-radius: 12px;
   background: #181b20;
   box-shadow: 0 6px 30px -10px rgba(0,0,0,0.65);
+  pointer-events: none;
 }
+
+.player-controls {
+  display: flex;
+  align-items: center;
+  gap: 20px;
+  padding: 12px 16px;
+  background: #1f2328;
+  border: 1px solid #30363d;
+  border-radius: 12px;
+}
+
+.play-pause-btn {
+  background: #2563eb;
+  color: white;
+  border: none;
+  padding: 10px 15px;
+  border-radius: 8px;
+  cursor: pointer;
+  font-size: 16px;
+  min-width: 50px;
+}
+
+.play-pause-btn:hover {
+  background: #1d4ed8;
+}
+
 .volume-control {
   display: flex;
   align-items: center;
   gap: 12px;
-  padding: 8px 12px;
-  background: #1f2328;
-  border: 1px solid #30363d;
-  border-radius: 8px;
-  margin-top: 8px;
+  flex: 1;
 }
-.volume-icon { font-size: 16px; width: 20px; text-align: center; }
-.volume-slider { flex: 1; height: 4px; background: #30363d; border-radius: 2px; outline: none; cursor: pointer; }
-.volume-slider::-webkit-slider-thumb { -webkit-appearance: none; appearance: none; width: 16px; height: 16px; background: #2563eb; border-radius: 50%; cursor: pointer; }
-.volume-slider::-moz-range-thumb { width: 16px; height: 16px; background: #2563eb; border-radius: 50%; cursor: pointer; border: none; }
-.volume-value { font-size: 12px; color: #8b929d; min-width: 32px; text-align: right; }
+
+.volume-icon { 
+  font-size: 16px; 
+  width: 20px; 
+  text-align: center; 
+}
+
+.volume-slider { 
+  flex: 1; 
+  height: 4px; 
+  background: #30363d; 
+  border-radius: 2px; 
+  outline: none; 
+  cursor: pointer; 
+}
+
+.volume-slider::-webkit-slider-thumb { 
+  -webkit-appearance: none; 
+  appearance: none; 
+  width: 16px; 
+  height: 16px; 
+  background: #2563eb; 
+  border-radius: 50%; 
+  cursor: pointer; 
+}
+
+.volume-slider::-moz-range-thumb { 
+  width: 16px; 
+  height: 16px; 
+  background: #2563eb; 
+  border-radius: 50%; 
+  cursor: pointer; 
+  border: none; 
+}
+
+.volume-value { 
+  font-size: 12px; 
+  color: #8b929d; 
+  min-width: 32px; 
+  text-align: right; 
+}
 
 /* Keep results above iframe and clickable */
 .results-dropdown { z-index: 2000; }
